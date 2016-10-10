@@ -14,7 +14,7 @@ function MsgController($scope) {
   };
 
   $scope.growUp = function () {
-    $scope.stateOfBeing = "Swan.jpg";
+    $scope.stateOfBeing = "WhiteSwan.jpg";
   };
 }
 
