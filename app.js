@@ -15,7 +15,6 @@ function MsgController($scope) {
 
   $scope.growUp = function () {
     $scope.stateOfBeing = "Swan";
-    console.log($scope.stateOfBeing);
   };
 }
 
