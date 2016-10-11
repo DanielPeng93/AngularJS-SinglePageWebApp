@@ -9,7 +9,7 @@ LunchCheckController.$inject = ['$scope'];
 function LunchCheckController($scope) {
   $scope.menu = "";
   $scope.message = "";
-  $scope.myClass = false;
+  $scope.myClass;
 
   $scope.checkIfTooMuch = function () {
     $scope.message = checkNum($scope.menu);
@@ -24,14 +24,16 @@ function LunchCheckController($scope) {
       }
     }
     if (totalNum == 0) {
-      return "Please enter data first";
       $scope.myClass = true;
+      return "Please enter data first";
     } else if (totalNum < 3) {
+      $scope.myClass = false;
       return "Enjoy!";
 
     } else {
+      $scope.myClass = false;
       return "Too much!";
-    
+
     };
   };
 

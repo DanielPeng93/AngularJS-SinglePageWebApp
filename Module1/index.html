@@ -18,12 +18,12 @@
              placeholder="list comma separated dishes you usually have for lunch"
              class="form-control"
              ng-model="menu"
-             ng-class="{(myClass == true) ? 'border-color-red': 'border-color-green'}">
+             ng-class="{'border-color-red': myClass == true, 'border-color-green': myClass == false}">
          </div>
          <div class="form-group">
              <button class="btn btn-default" ng-click="checkIfTooMuch();">Check If Too Much</button>
          </div>
-         <div class="form-group message font-color-green" display="inline" ng-class="(myClass == true) ? 'font-color-red': 'font-color-green'}">
+         <div class="form-group message" display="inline" ng-class="{'font-color-red': myClass == true, 'font-color-green': myClass == false}">
            <!-- Your message can go here. -->
            {{message}}
          </div>
