@@ -12,9 +12,10 @@
 
   <h1>Expressions and Interpolation</h1>
   <div ng-controller='MsgController'>
-    <h3>Shopping List:</h3>
+    <h3>Shopping List:</h3><br>
+    <input type="text" ng-model="search">
          <ul>
-          <li ng-repeat="item in shoppingList1">{{ item }}</li>
+          <li ng-repeat="item in shoppingList1 | filter: search">{{ item }}</li>
         </ul>
 
          Shopping List #2:
