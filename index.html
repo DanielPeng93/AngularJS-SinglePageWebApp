@@ -9,13 +9,63 @@
   <title>Expressions and Interpolation</title>
 </head>
 <body>
+
   <h1>Expressions and Interpolation</h1>
   <div ng-controller='MsgController'>
+    <h3>Shopping List:</h3>
+         <ul>
+          <li ng-repeat="item in shoppingList1">{{ item }}</li>
+        </ul>
+
+         Shopping List #2:
+         <ul>
+          <li ng-repeat="item in shoppingList2">Buy {{item.quantity}} of {{item.name}}(s)</li>
+        </ul>
+
+         Shopping List #3:
+     <input type="text" ng-model="shoppingList2[0].quantity">
+     <ul>
+       <li ng-repeat="item in shoppingList2">{{$index + 1}}. Buy {{item.quantity}} of {{item.name}}(s)</li>
+     </ul>
+     <br>
+     <input type="text" ng-model="newItemName" placeholder="item name">
+     <input type="text" ng-model="newItemQuantity" placeholder="item quantity">
+     <button ng-click="addToList()">Add To List</button><br>
+    <button ng-click="setFullName()">Set Full Name</button><br>
+
+    Full name is: {{ :: fullName }} <br>
+    <button ng-click="logFirstName()">Log First Name</button><br>
+    <button ng-click="logFullName()">Log Full Name</button><br>
+
+    <div>
+      <input type="text" ng-model="firstName">
+    </div>
+    <button ng-click="showNumberOfWatchers()">
+      Log # of Watchers</button>
+      <input type="text" ng-model="name">
+    <div>
+      <button ng-click="countOnce()">Up Once Counter (once)</button>
+      <button ng-click="upCounter()">Increment Counter</button>
+    </div>
+    <div>
+      Once counter: {{ onceCounter }} <br>
+      Regular counter: {{ counter }}
+    </div>
+    <div>
+      <button ng-click="upCounter1()">Increment Counter1</button>
+    </div>
+    <div>
+      Regular counter1: {{ counter1 }}
+    </div>
     {{name}} has a message for you: <br>
-    {{sayMessage()}}
+    Original: {{sayMessage() | uppercase}}<br>
+    Customed: {{sayIMessage() | uppercase}}<br>
+    Customed with AngularJS: {{sayMessage() | custom : 'duckling' : 'little duck'}}<br>
+    Customed with AngularJS (2): {{sayMessage() | custom : 'duckling' : 'little duck' | uppercase}}
     <div>
       <button ng-click="growUp()">But you are not:</button>
       <br>
+      Cost: {{cookieCost | currency : "Yuan" : 3}}
       <br>
       <br>
       <br>
