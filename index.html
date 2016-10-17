@@ -1,77 +1,44 @@
 <!DOCTYPE html>
-<html ng-app='MsgApp'>
-<head>
-  <meta charset="utf-8">
-  <script src="angular.min.js"></script>
-  <script src="app.js"></script>
-  <link rel="shortcut icon" ng-href="favicon.ico">
-  <style> body { font-size: 1.2em; }</style>
-  <title>Expressions and Interpolation</title>
-</head>
-<body>
+<html ng-app='ControllerAsApp'>
+  <head>
+    <meta charset="utf-8">
+    <script src="angular.min.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="styles/general.css">
+    <title>Custom Service</title>
+  </head>
+  <body>
+    <h1>Custom Service Through a Factory</h1>
 
-  <h1>Expressions and Interpolation</h1>
-  <div ng-controller='MsgController'>
-    <h3>Shopping List:</h3><br>
-    <input type="text" ng-model="search">
-         <ul>
-          <li ng-repeat="item in shoppingList1 | filter: search">{{ item }}</li>
-        </ul>
+    <!-- LIST #1 - unlimited items -->
+    <div id="list1" ng-controller='ShoppingListController1 as list1'>
+      <h3>Shopping List #1</h3>
+      <input type="text" ng-model="list1.itemName" placeholder="item name">
+      <input type="text" ng-model="list1.itemQuantity" placeholder="quantity">
+      <button ng-click="list1.addItem();">Add Item</button>
+      <ol>
+        <li ng-repeat="item in list1.items">
+          {{ item.quantity }} of {{ item.name }}
+          <button ng-click="list1.removeItem($index);">Remove Item</button>
+        </li>
+      </ol>
+      <div class="error">Error: {{list1.errorMessage}}</div>
+    </div>
 
-         Shopping List #2:
-         <ul>
-          <li ng-repeat="item in shoppingList2">Buy {{item.quantity}} of {{item.name}}(s)</li>
-        </ul>
+    <!-- LIST #2 (limited to 3 items) -->
+    <div id="list2" ng-controller='ShoppingListController2 as list2'>
+      <h3>Shopping List #2 (limited to 3 items)</h3>
+      <input type="text" ng-model="list2.itemName" placeholder="item name">
+      <input type="text" ng-model="list2.itemQuantity" placeholder="quantity">
+      <button ng-click="list2.addItem();">Add Item</button>
+      <ol>
+        <li ng-repeat="item in list2.items">
+          {{ item.quantity }} of {{ item.name }}
+          <button ng-click="list2.removeItem($index);">Remove Item</button>
+        </li>
+      </ol>
+      <div class="error">Error: {{list2.errorMessage}}</div>
+    </div>
 
-         Shopping List #3:
-     <input type="text" ng-model="shoppingList2[0].quantity">
-     <ul>
-       <li ng-repeat="item in shoppingList2">{{$index + 1}}. Buy {{item.quantity}} of {{item.name}}(s)</li>
-     </ul>
-     <br>
-     <input type="text" ng-model="newItemName" placeholder="item name">
-     <input type="text" ng-model="newItemQuantity" placeholder="item quantity">
-     <button ng-click="addToList()">Add To List</button><br>
-    <button ng-click="setFullName()">Set Full Name</button><br>
-
-    Full name is: {{ :: fullName }} <br>
-    <button ng-click="logFirstName()">Log First Name</button><br>
-    <button ng-click="logFullName()">Log Full Name</button><br>
-
-    <div>
-      <input type="text" ng-model="firstName">
-    </div>
-    <button ng-click="showNumberOfWatchers()">
-      Log # of Watchers</button>
-      <input type="text" ng-model="name">
-    <div>
-      <button ng-click="countOnce()">Up Once Counter (once)</button>
-      <button ng-click="upCounter()">Increment Counter</button>
-    </div>
-    <div>
-      Once counter: {{ onceCounter }} <br>
-      Regular counter: {{ counter }}
-    </div>
-    <div>
-      <button ng-click="upCounter1()">Increment Counter1</button>
-    </div>
-    <div>
-      Regular counter1: {{ counter1 }}
-    </div>
-    {{name}} has a message for you: <br>
-    Original: {{sayMessage() | uppercase}}<br>
-    Customed: {{sayIMessage() | uppercase}}<br>
-    Customed with AngularJS: {{sayMessage() | custom : 'duckling' : 'little duck'}}<br>
-    Customed with AngularJS (2): {{sayMessage() | custom : 'duckling' : 'little duck' | uppercase}}
-    <div>
-      <button ng-click="growUp()">But you are not:</button>
-      <br>
-      Cost: {{cookieCost | currency : "Yuan" : 3}}
-      <br>
-      <br>
-      <br>
-      <img ng-src="images/{{stateOfBeing}}" height="300" width="300">
-    </div>
-  </div>
-</body>
+  </body>
 </html>
