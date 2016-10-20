@@ -26,7 +26,7 @@ function LunchCheckController($scope) {
     if (totalNum == 0) {
       $scope.myClass = true;
       return "Please enter data first";
-    } else if (totalNum < 3) {
+    } else if (totalNum < 4) {
       $scope.myClass = false;
       return "Enjoy!";
 
