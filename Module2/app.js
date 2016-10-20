@@ -69,7 +69,7 @@ function ShoppingListCheckOffService(){
   };
 
   vm.removeItem = function (itemIndex) {
-  items.splice(itemIndex, 1);
+  shoppingList.splice(itemIndex, 1);
   };
 
   vm.addBoughtItem = function(itemName, itemQuantity){
