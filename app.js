@@ -1,93 +1,102 @@
 (function () {
 'use strict';
 
-angular.module('ShoppingListPromiseApp', [])
-.controller('ShoppingListController', ShoppingListController)
-.service('ShoppingListService', ShoppingListService)
-.service('WeightLossFilterService', WeightLossFilterService);
+angular.module('ShoppingListDirectiveApp', [])
+.controller('ShoppingListController1', ShoppingListController1)
+.controller('ShoppingListController2', ShoppingListController2)
+.factory('ShoppingListFactory', ShoppingListFactory)
+.directive('listItemDescription', ListItemDescription)
+.directive('listItem', ListItem);
 
-ShoppingListController.$inject = ['ShoppingListService'];
-function ShoppingListController(ShoppingListService) {
+
+function ListItem() {
+  var ddo = {
+    templateUrl: 'listItem.html'
+  };
+
+  return ddo;
+}
+
+
+function ListItemDescription() {
+  var ddo = {
+    template: '{{ item.quantity }} of {{ item.name }}'
+  };
+
+  return ddo;
+}
+
+
+// LIST #1 - controller
+ShoppingListController1.$inject = ['ShoppingListFactory'];
+function ShoppingListController1(ShoppingListFactory) {
   var list = this;
 
-  list.items = ShoppingListService.getItems();
+  // Use factory to create new shopping list service
+  var shoppingList = ShoppingListFactory();
+
+  list.items = shoppingList.getItems();
 
   list.itemName = "";
   list.itemQuantity = "";
 
   list.addItem = function () {
-    ShoppingListService.addItem(list.itemName, list.itemQuantity);
-  };
+    shoppingList.addItem(list.itemName, list.itemQuantity);
+  }
 
   list.removeItem = function (itemIndex) {
-    ShoppingListService.removeItem(itemIndex);
+    shoppingList.removeItem(itemIndex);
   };
 }
 
 
-ShoppingListService.$inject = ['$q', 'WeightLossFilterService'];
-function ShoppingListService($q, WeightLossFilterService) {
+// LIST #2 - controller
+ShoppingListController2.$inject = ['ShoppingListFactory'];
+function ShoppingListController2(ShoppingListFactory) {
+  var list = this;
+
+  // Use factory to create new shopping list service
+  var shoppingList = ShoppingListFactory(3);
+
+  list.items = shoppingList.getItems();
+
+  list.itemName = "";
+  list.itemQuantity = "";
+
+  list.addItem = function () {
+    try {
+      shoppingList.addItem(list.itemName, list.itemQuantity);
+    } catch (error) {
+      list.errorMessage = error.message;
+    }
+
+  };
+
+  list.removeItem = function (itemIndex) {
+    shoppingList.removeItem(itemIndex);
+  };
+}
+
+
+// If not specified, maxItems assumed unlimited
+function ShoppingListService(maxItems) {
   var service = this;
 
   // List of shopping items
   var items = [];
 
-  // service.addItem = function (name, quantity) {
-  //   var promise = WeightLossFilterService.checkName(name);
-  //
-  //   promise.then(function (response) {
-  //     var nextPromise = WeightLossFilterService.checkQuantity(quantity);
-  //
-  //     nextPromise.then(function (result) {
-  //       var item = {
-  //         name: name,
-  //         quantity: quantity
-  //       };
-  //       items.push(item);
-  //     }, function (errorResponse) {
-  //       console.log(errorResponse.message);
-  //     });
-  //   }, function (errorResponse) {
-  //     console.log(errorResponse.message);
-  //   });
-  // };
-
-
-  // service.addItem = function (name, quantity) {
-  //   var promise = WeightLossFilterService.checkName(name);
-  //
-  //   promise
-  //   .then(function (response) {
-  //     return WeightLossFilterService.checkQuantity(quantity);
-  //   })
-  //   .then(function (response) {
-  //     var item = {
-  //       name: name,
-  //       quantity: quantity
-  //     };
-  //     items.push(item);
-  //   })
-  //   .catch(function (errorResponse) {
-  //     console.log(errorResponse.message);
-  //   });
-  // };
-
-
-  service.addItem = function (name, quantity) {
-    var namePromise = WeightLossFilterService.checkName(name);
-    var quantityPromise = WeightLossFilterService.checkQuantity(quantity);
-
-    $q.all([namePromise, quantityPromise]).
-    then(function (response) {
+  service.addItem = function (itemName, quantity) {
+    if ((maxItems === undefined) ||
+        (maxItems !== undefined) && (items.length < maxItems)) {
       var item = {
-        name: name,
+        name: itemName,
         quantity: quantity
       };
       items.push(item);
-    })
-    .catch(function (errorResponse) {
-      console.log(errorResponse.message);
-    });
+    }
+    else {
+      throw new Error("Max items (" + maxItems + ") reached.");
+    }
   };
 
   service.removeItem = function (itemIndex) {
@@ -100,51 +109,12 @@ function ShoppingListService($q, WeightLossFilterService) {
 }
 
 
-WeightLossFilterService.$inject = ['$q', '$timeout'];
-function WeightLossFilterService($q, $timeout) {
-  var service = this;
-
-  service.checkName = function (name) {
-    var deferred = $q.defer();
-
-    var result = {
-      message: ""
-    };
-
-    $timeout(function () {
-      // Check for cookies
-      if (name.toLowerCase().indexOf('cookie') === -1) {
-        deferred.resolve(result)
-      }
-      else {
-        result.message = "Stay away from cookies, Yaakov!";
-        deferred.reject(result);
-      }
-    }, 3000);
-
-    return deferred.promise;
+function ShoppingListFactory() {
+  var factory = function (maxItems) {
+    return new ShoppingListService(maxItems);
   };
 
-
-  service.checkQuantity = function (quantity) {
-    var deferred = $q.defer();
-    var result = {
-      message: ""
-    };
-
-    $timeout(function () {
-      // Check for too many boxes
-      if (quantity < 6) {
-        deferred.resolve(result);
-      }
-      else {
-        result.message = "That's too much, Yaakov!";
-        deferred.reject(result);
-      }
-    }, 1000);
-
-    return deferred.promise;
-  };
+  return factory;
 }
 
 })();
