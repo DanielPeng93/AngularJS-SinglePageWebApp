@@ -46,7 +46,7 @@
         url: "https://davids-restaurant.herokuapp.com/menu_items.json"
       }).then(function (result){
         result.data.menu_items.forEach(function(item){
-          if( item.description.toLowerCase().indexOf(searchItem) !== -1 ){
+          if( item.description.toLowerCase().indexOf(searchItem.toLowerCase()) !== -1 ){
             items.push(item);
           }
         })
