@@ -10,6 +10,6 @@ body {
 
 .loading-icon {
   position: absolute;
-  left: calc(100% / 2);
+  left: 50%;
   top: 10px;
 }
